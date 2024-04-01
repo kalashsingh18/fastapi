@@ -68,8 +68,9 @@ from psycopg2.extras import RealDictCursor
 from pydantic import BaseModel
 
 import models
-from database import engine,sesionlocal
+from database import engine,sesionlocal,get_db
 from sqlalchemy.orm import Session
+get_db()
 try:
     # Attempt to create all tables
     models.Base.metadata.create_all(bind=engine)
@@ -79,12 +80,7 @@ except Exception as e:
     print("Error occurred while creating tables:", e)
 
 print("connected")
-def get_db():
-    db = sesionlocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
 app=FastAPI()
 # conn =psycopg2.connect(host='localhost',user='postgres',password='akhilesh',database="Fastapi",cursor_factory=RealDictCursor)
 # cursor=conn.cursor()
@@ -100,7 +96,8 @@ class post(BaseModel):
 #     return {"user":post}
 @app.get("/sql")
 def gets(db: Session = Depends(get_db)):
-    return {"status":"sucess"}
+    sucess=db.query(models.Post).all()
+    return {"status": sucess}
 # @app.get("/post/{id}")
 # def gets(id: int):
     
