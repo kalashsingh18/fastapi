@@ -63,9 +63,9 @@
 #     else:
 #         return {"id":"doesnot exist"}
 from fastapi import FastAPI,Depends
+import schemas
 import psycopg2 
 from psycopg2.extras import RealDictCursor
-from pydantic import BaseModel
 
 import models
 from database import engine,sesionlocal,get_db
@@ -84,10 +84,8 @@ print("connected")
 app=FastAPI()
 # conn =psycopg2.connect(host='localhost',user='postgres',password='akhilesh',database="Fastapi",cursor_factory=RealDictCursor)
 # cursor=conn.cursor()
-class post(BaseModel):
-    title:str
-    about:str
 
+    
 # @app.get("/")
 # def gets(post:post):
 #     cursor.execute("SELECT * FROM posts")
@@ -95,9 +93,17 @@ class post(BaseModel):
 #     print(post)
 #     return {"user":post}
 @app.get("/sql")
-def gets(db: Session = Depends(get_db)):
-    sucess=db.query(models.Post).all()
-    return {"status": sucess}
+def gets(response_model=schemas.post,db: Session = Depends(get_db)):
+    sucess=db.query(models.Post).first()
+    print(sucess)
+    print(type(sucess))
+    return sucess
+@app.get("/post/{id}")
+def get_by_id(id:int, post:schemas.post ,db: Session = Depends(get_db)):
+    sucess=db.query(models.Post).filter(models.Post.id==id).all()
+    print(sucess)
+    print(post)
+    return {"sucess":sucess}
 # @app.get("/post/{id}")
 # def gets(id: int):
     
@@ -111,14 +117,55 @@ def gets(db: Session = Depends(get_db)):
 #     conn.commit()
 #     data=cursor.fetchone()
 #     return {"create":data}
+@app.post("/posts")
+def post(posts:schemas.post,db : Session= Depends(get_db)):
+    print(posts.title,posts.content)
+
+   
+    new_post=models.Post(**posts.dict())
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+  
+    return {"post":new_post}
 # @app.delete("/post/{name}")
 # def delete_post(name:int):
 #     cursor.execute("delete from posts where id = %s returning * ",(str(name),))
 #     deleted=cursor.fetchone()
 #     conn.commit()
 #     return {"delete": deleted}
+@app.delete("/posts/{id}")
+def delete(id:int,db:Session=Depends(get_db)):
+    post=db.query(models.Post).filter(models.Post.id==id)
+    post.delete(synchronize_session=False)
+    db.commit()
+    
+    return {"post","deleted"}
+#creating the user      
+@app.post("/user")
+def create_User(post:schemas.user,db:Session=Depends(get_db)):
+    new_user=models.User(email=post.email,name=post.name)
+    db.add(new_user)
+    
+    db.commit()
+    db.refresh(new_user)
+    return new_user    
+@app.get("/user")
+def get_method(db:Session=Depends(get_db)):
+    return {"data":db.query(models.User).all()}
+@app.get("/user/{id}")
+def get_id(id:int,db:Session=Depends(get_db)):
+    print(id)
+    print(db.query(models.User).filter(models.User.id==id).all())
+    return {"data":db.query(models.User).filter(models.User.id==id).all()}
 
+@app.delete("/user/{id}")
+def delete(id:int,db:Session=Depends(get_db)):
+    post=db.query(models.User).filter(models.User.id==id)
+    post.delete(synchronize_session=False)
+    db.commit()
 
+    return post
             
 
 
