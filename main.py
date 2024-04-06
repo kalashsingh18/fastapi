@@ -70,6 +70,10 @@ from psycopg2.extras import RealDictCursor
 import models
 from database import engine,sesionlocal,get_db
 from sqlalchemy.orm import Session
+# from ""  import post
+from router.post import router
+
+
 get_db()
 try:
     # Attempt to create all tables
@@ -80,11 +84,11 @@ except Exception as e:
     print("Error occurred while creating tables:", e)
 
 print("connected")
-
 app=FastAPI()
+
 # conn =psycopg2.connect(host='localhost',user='postgres',password='akhilesh',database="Fastapi",cursor_factory=RealDictCursor)
 # cursor=conn.cursor()
-
+app.include_router(router)
     
 # @app.get("/")
 # def gets(post:post):
@@ -92,18 +96,7 @@ app=FastAPI()
 #     post=cursor.fetchall()
 #     print(post)
 #     return {"user":post}
-@app.get("/sql")
-def gets(response_model=schemas.post,db: Session = Depends(get_db)):
-    sucess=db.query(models.Post).first()
-    print(sucess)
-    print(type(sucess))
-    return sucess
-@app.get("/post/{id}")
-def get_by_id(id:int, post:schemas.post ,db: Session = Depends(get_db)):
-    sucess=db.query(models.Post).filter(models.Post.id==id).all()
-    print(sucess)
-    print(post)
-    return {"sucess":sucess}
+
 # @app.get("/post/{id}")
 # def gets(id: int):
     
@@ -117,17 +110,7 @@ def get_by_id(id:int, post:schemas.post ,db: Session = Depends(get_db)):
 #     conn.commit()
 #     data=cursor.fetchone()
 #     return {"create":data}
-@app.post("/posts")
-def post(posts:schemas.post,db : Session= Depends(get_db)):
-    print(posts.title,posts.content)
 
-   
-    new_post=models.Post(**posts.dict())
-    db.add(new_post)
-    db.commit()
-    db.refresh(new_post)
-  
-    return {"post":new_post}
 # @app.delete("/post/{name}")
 # def delete_post(name:int):
 #     cursor.execute("delete from posts where id = %s returning * ",(str(name),))
