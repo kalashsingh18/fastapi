@@ -71,7 +71,8 @@ import models
 from database import engine,sesionlocal,get_db
 from sqlalchemy.orm import Session
 # from ""  import post
-from router.post import router
+from router.post import router_post
+from router.user import router_user
 
 
 get_db()
@@ -88,7 +89,8 @@ app=FastAPI()
 
 # conn =psycopg2.connect(host='localhost',user='postgres',password='akhilesh',database="Fastapi",cursor_factory=RealDictCursor)
 # cursor=conn.cursor()
-app.include_router(router)
+app.include_router(router_post)
+app.include_router(router_user)
     
 # @app.get("/")
 # def gets(post:post):
@@ -117,38 +119,9 @@ app.include_router(router)
 #     deleted=cursor.fetchone()
 #     conn.commit()
 #     return {"delete": deleted}
-@app.delete("/posts/{id}")
-def delete(id:int,db:Session=Depends(get_db)):
-    post=db.query(models.Post).filter(models.Post.id==id)
-    post.delete(synchronize_session=False)
-    db.commit()
-    
-    return {"post","deleted"}
+
 #creating the user      
-@app.post("/user")
-def create_User(post:schemas.user,db:Session=Depends(get_db)):
-    new_user=models.User(email=post.email,name=post.name)
-    db.add(new_user)
-    
-    db.commit()
-    db.refresh(new_user)
-    return new_user    
-@app.get("/user")
-def get_method(db:Session=Depends(get_db)):
-    return {"data":db.query(models.User).all()}
-@app.get("/user/{id}")
-def get_id(id:int,db:Session=Depends(get_db)):
-    print(id)
-    print(db.query(models.User).filter(models.User.id==id).all())
-    return {"data":db.query(models.User).filter(models.User.id==id).all()}
 
-@app.delete("/user/{id}")
-def delete(id:int,db:Session=Depends(get_db)):
-    post=db.query(models.User).filter(models.User.id==id)
-    post.delete(synchronize_session=False)
-    db.commit()
-
-    return post
             
 
 
