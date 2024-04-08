@@ -73,9 +73,12 @@ from sqlalchemy.orm import Session
 # from ""  import post
 from router.post import router_post
 from router.user import router_user
+from router.auth import router_auth
 
-
-get_db()
+try:
+ get_db()
+except:
+    raise "not found "
 try:
     # Attempt to create all tables
     models.Base.metadata.create_all(bind=engine)
@@ -91,6 +94,9 @@ app=FastAPI()
 # cursor=conn.cursor()
 app.include_router(router_post)
 app.include_router(router_user)
+
+app.include_router(router_auth)
+
     
 # @app.get("/")
 # def gets(post:post):

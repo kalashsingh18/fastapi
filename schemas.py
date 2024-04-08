@@ -7,7 +7,11 @@ class post(BaseModel):
     class Config:
         orm_mode=True
 class user(BaseModel):
-    name: str
     email:EmailStr
+    name: str
+    password: str
+class login_user(BaseModel):
+    email:EmailStr
+    password:str
     
     
