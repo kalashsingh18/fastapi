@@ -1,18 +1,23 @@
 from fastapi import Depends,APIRouter,HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from main import models
+import database
 from main import schemas
 from database import get_db
 from router import utils
 from sqlalchemy.orm import Session
 from fastapi import HTTPException
 from datetime import datetime, timedelta
-import dificult
+from jose import jwt,JWTError
+
+
 router_auth=APIRouter(tags=["auth"])
-from jose import jwt
+
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
-print("heree")
+ACCESS_TOKEN_EXPIRE_MINUTES = 6000000
+oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
+
 @router_auth.post("/login")
 
 # Assuming these constants are defined somewhere in your code
@@ -31,7 +36,43 @@ def login_auth(user_credatilas: schemas.login_user, db: Session = Depends(get_db
 
 def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.now() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
+
+# def verify_access_token(token: str, credentials_exception: HTTPException):
+def verify_access_token(token: str, credentials_exception: HTTPException):
+    try:
+        
+        print(token)
+
+        token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo0MiwiZXhwIjoyMDczNDQxMDM2fQ.2INpUQR-Fiiwibdu0fBxJ_7ZCK5UZQsP_dMvkYVX0mM"
+        
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        
+        id = payload.get("user_id")
+        print(id)
+        if id is None:
+            raise credentials_exception
+        return id
+    except jwt.ExpiredSignatureError:
+     print("Token has expired")
+
+    except JWTError:
+        raise credentials_exception
+def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
+    
+    credentials_exception = HTTPException(status_code=401, detail="Invalid token")
+    token=verify_access_token(token, credentials_exception)
+    user=db.query(models.User).filter(models.User.id == token).first()
+   
+    return user   
+    
+
+  
+
+  
+     
+  
+    

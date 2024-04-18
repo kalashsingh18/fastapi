@@ -74,28 +74,36 @@ from sqlalchemy.orm import Session
 from router.post import router_post
 from router.user import router_user
 from router.auth import router_auth
+from router.votes import router_votes
 
+try:
+    # Attempt to create all tables
+    models.Base.metadata.create_all(bind=engine)
+    
+except Exception as e:
+    # Print the error message if an exception occurs
+    print("Error occurred while creating tables:", e)
 try:
  get_db()
 except:
     raise "not found "
-try:
-    # Attempt to create all tables
-    models.Base.metadata.create_all(bind=engine)
-    print("Tables created successfully.")
-except Exception as e:
-    # Print the error message if an exception occurs
-    print("Error occurred while creating tables:", e)
 
-print("connected")
 app=FastAPI()
+app.include_router(router_post)
+app.include_router(router_user)
+app.include_router(router_auth)
+app.include_router(router_votes)
+
+
+
+
+
+
 
 # conn =psycopg2.connect(host='localhost',user='postgres',password='akhilesh',database="Fastapi",cursor_factory=RealDictCursor)
 # cursor=conn.cursor()
-app.include_router(router_post)
-app.include_router(router_user)
 
-app.include_router(router_auth)
+
 
     
 # @app.get("/")
