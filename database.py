@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from config import Settings
-sqlalchemy_database_url="postgres+psycopg2://fastapiuser:Axhcy8nhpba61kFaITHvhGAFbwScHJCS@dpg-coh27onsc6pc73aet7ug-a.oregon-postgres.render.com/fastapi_i3fn"
+sqlalchemy_database_url="postgresql://fastapiuser:Axhcy8nhpba61kFaITHvhGAFbwScHJCS@dpg-coh27onsc6pc73aet7ug-a.oregon-postgres.render.com/fastapi_i3fn"
 
 engine=create_engine(sqlalchemy_database_url)
 sesionlocal=sessionmaker(autoflush=False,autocommit=False,bind=engine)
