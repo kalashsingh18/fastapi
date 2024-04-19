@@ -101,9 +101,10 @@ app.include_router(router_post)
 app.include_router(router_user)
 app.include_router(router_auth)
 app.include_router(router_votes)
-@app.get("/")
-def func():
-    return{"kalash":"kl"}
+
+@app.head("/")
+def head_root():
+    return {"message": "HEAD request to root endpoint"}
 
 
 
