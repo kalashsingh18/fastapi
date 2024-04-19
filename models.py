@@ -13,7 +13,7 @@ class User(Base):
     name = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
     password = Column(String, nullable=False)
-    phone_number=Column(String)
+   
 
 
 class Post(Base):
