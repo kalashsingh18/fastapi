@@ -70,7 +70,7 @@ from psycopg2.extras import RealDictCursor
 import models
 from database import engine,sesionlocal,get_db
 from sqlalchemy.orm import Session
-# from ""  import post
+from fastapi.middleware.cors import CORSMiddleware
 from router.post import router_post
 from router.user import router_user
 from router.auth import router_auth
@@ -89,6 +89,14 @@ except:
     raise "not found "
 
 app=FastAPI()
+origins=["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(router_post)
 app.include_router(router_user)
 app.include_router(router_auth)
