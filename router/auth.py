@@ -45,7 +45,7 @@ def create_access_token(data: dict):
 def verify_access_token(token: str, credentials_exception: HTTPException):
     try:
         
-        print(token)
+        print("token",token)
 
         
         
@@ -54,6 +54,7 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
         id = payload.get("user_id")
         print(id)
         if id is None:
+            print("is is none",id)
             raise credentials_exception
         return id
     except jwt.ExpiredSignatureError:
@@ -62,10 +63,10 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
     except JWTError:
         raise credentials_exception
 def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
-    print("toekn",token)
+    
     credentials_exception = HTTPException(status_code=401, detail="Invalid token")
-    token=verify_access_token(token, credentials_exception)
-    user=db.query(models.User).filter(models.User.id == token).first()
+    tokens=verify_access_token(token, credentials_exception)
+    user=db.query(models.User).filter(models.User.id == tokens).first()
    
     return user   
     
