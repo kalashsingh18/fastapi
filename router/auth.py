@@ -45,7 +45,7 @@ def create_access_token(data: dict):
 def verify_access_token(tokens: str, credentials_exception: HTTPException):
  
         print("Token:", tokens)
-        print(tokens)
+        print(type(tokens))
         token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
         print(token==tokens)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
