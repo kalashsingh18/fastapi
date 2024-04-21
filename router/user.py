@@ -34,5 +34,5 @@ def delete(id:int,db:Session=Depends(get_db),current_user:int =Depends(get_curre
     print(users)
     users.delete(synchronize_session=False)
     db.commit()
-    return 
+    return users
 
