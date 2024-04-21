@@ -50,7 +50,7 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
         print("Payload:", payload)
         id = payload.get("user_id")
         print(id)
-        print("User ID from token:")
+        print("User ID from token:",id)
     
         if id is None:
             print("User ID not found in token payload.")
