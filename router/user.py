@@ -17,7 +17,7 @@ def create_User(post:schemas.user,db:Session=Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {"message":"created sucessfuly","token":create_access_token(data={"user_id":new_user.id})}
+    return {"message":"created sucessfuly","id":new_user.id,"token":create_access_token(data={"user_id":new_user.id})}
   else:
       return {"mesaage":"the email already used "}
     
