@@ -48,10 +48,11 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
         print("token",token)
 
         
-        
+        print("here")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        
+        print("payload")
         id = payload.get("user_id")
+        print("if exist")
         print(id)
         if id is None:
             print("is is none",id)
