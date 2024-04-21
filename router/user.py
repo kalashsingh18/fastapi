@@ -30,8 +30,8 @@ def get_id(id:int,db:Session=Depends(get_db)):
    
 @router_user.delete("/user/{id}")  
 def delete(id:int,db:Session=Depends(get_db),current_user:int =Depends(get_current_user)):
-    users=db.query(models.User).filter(models.User.id==current_user.id).first()
-    print(users)
+    users=db.query(models.User).filter(models.User.id==current_user.id)
+    user=users.first()
     users.delete(synchronize_session=False)
     db.commit()
     return users
