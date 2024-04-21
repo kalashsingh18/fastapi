@@ -42,12 +42,12 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 # def verify_access_token(token: str, credentials_exception: HTTPException):
-def verify_access_token(token: str, credentials_exception: HTTPException):
+def verify_access_token(tokens: str, credentials_exception: HTTPException):
  
         print("Token:", token)
         print(token)
         token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
-        print(token)
+        print(token==tokens)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         print("Payload:", payload)
         id = payload.get("user_id")
