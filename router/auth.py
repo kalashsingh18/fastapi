@@ -46,6 +46,7 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
  
         print("Token:", token)
         token=str(checks)
+        print(token)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         print("Payload:", payload)
         id = payload.get("user_id")
