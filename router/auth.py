@@ -43,7 +43,7 @@ def create_access_token(data: dict):
 
 # def verify_access_token(token: str, credentials_exception: HTTPException):
 def verify_access_token(token: str, credentials_exception: HTTPException):
-    try:
+ 
         print("Token:", token)
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         print("Payload:", payload)
@@ -56,13 +56,9 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
         return id
         
 
-    except jwt.ExpiredSignatureError:
-        print("Token has expired.")
-        raise credentials_exception
 
-    except JWTError as e:
-        print(f"Token decoding failed: {e}")
-        raise credentials_exception
+
+
 
 def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
     check=token
