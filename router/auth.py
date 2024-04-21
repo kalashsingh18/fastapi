@@ -48,7 +48,7 @@ def verify_access_token(token: str, credentials_exception: HTTPException):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         print("Payload:", payload)
         id = payload.get("user_id")
-        print("User ID from token:", id)
+        print("User ID from token:")
     
         if id is None:
             print("User ID not found in token payload.")
