@@ -65,14 +65,16 @@ def verify_access_token(tokens: str, credentials_exception: HTTPException):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
-    global checks
     checks=token
+    air="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
     print("CHECK",checks,"token",token)
+    print(air==checks)
     credentials_exception = HTTPException(status_code=401, detail="Invalid token")
     tokens=verify_access_token(checks, credentials_exception)
     user=db.query(models.User).filter(models.User.id == tokens).first()
-   
     return user   
+    
+   
     
 
   
