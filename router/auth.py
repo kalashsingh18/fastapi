@@ -64,7 +64,7 @@ def verify_access_token(tokens: str, credentials_exception: HTTPException):
 
 
 
-def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
+def get_current_user(token:str,db:Session =Depends(database.get_db)):
     checks=token
     air="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
     print(air==checks)
