@@ -16,7 +16,7 @@ router_auth=APIRouter(tags=["auth"])
 SECRET_KEY = "your_secret_key"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 6000000
-oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme=OAuth2PasswordBearer(tokenUrl="user")
 
 @router_auth.post("/login")
 
@@ -64,7 +64,7 @@ def verify_access_token(tokens: str, credentials_exception: HTTPException):
 
 
 
-def get_current_user(token:str,db:Session =Depends(database.get_db)):
+def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(database.get_db)):
     checks=token
     air="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
     print(air==checks)
