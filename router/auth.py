@@ -68,7 +68,7 @@ def get_current_user(token: str = Depends(oauth2_scheme),db:Session =Depends(dat
     checks=token
     air="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMSwiZXhwIjoyMDczNzMwNjYzfQ.Ng9vi_fq7O2x6qLm8_-wludc3FOmXJEp46TkLRias-0"
     print(checks)
-    print(air==checks)
+    print(air==token)
     print("CHECK",checks,"token",token)
     credentials_exception = HTTPException(status_code=401, detail="Invalid token")
     tokens=verify_access_token(checks, credentials_exception)
