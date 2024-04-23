@@ -5,7 +5,7 @@ from database import get_db
 from sqlalchemy.orm import Session
 from .import utils
 
-from .auth import create_access_token,get_current_user
+from .auth import create_access_token,get_current_user,verify_access_token
 
 router_user=APIRouter(tags=['login'])
 @router_user.post("/create_user")
@@ -29,7 +29,7 @@ def get_id(id:int,db:Session=Depends(get_db)):
     return {"data":db.query(models.User).filter(models.User.id==id).all()}
    
 @router_user.delete("/user/{id}")  
-def delete(id:int,db:Session=Depends(get_db),current_user:int =Depends(get_current_user)):
+def delete(id:int,db:Session=Depends(get_db),current_user:int =Depends(verify_access_token)):
     users=db.query(models.User).filter(models.User.id==current_user.id)
     user=users.first()
     users.delete(synchronize_session=False)

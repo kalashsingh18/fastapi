@@ -42,7 +42,7 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 # def verify_access_token(token: str, credentials_exception: HTTPException):
-def verify_access_token(tokens: str, credentials_exception: HTTPException):
+def verify_access_token(tokens:str= Depends(oauth2_scheme)):
  
         print("Token:", tokens)
         print(type(tokens))
@@ -56,7 +56,7 @@ def verify_access_token(tokens: str, credentials_exception: HTTPException):
     
         if id is None:
             print("User ID not found in token payload.")
-            raise credentials_exception
+            raise {"error":"occured"}
         return id
         
 
