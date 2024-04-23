@@ -43,7 +43,7 @@ def create_access_token(data: dict):
 
 # def verify_access_token(token: str, credentials_exception: HTTPException):
 def verify_access_token(tokens:str= Depends(oauth2_scheme)):
- 
+        print("here")
         print("Token:", tokens)
         print(type(tokens))
     
