@@ -29,7 +29,7 @@ def get_id(id:int,db:Session=Depends(get_db)):
     return {"data":db.query(models.User).filter(models.User.id==id).all()}
    
 @router_user.delete("/user/{id}")  
-def delete(id:int,db:Session=Depends(get_db),current_user:int =Depends(verify_access_token)):
+def delete(db:Session=Depends(get_db),current_user:int =Depends(verify_access_token)):
     users=db.query(models.User).filter(models.User.id==current_user.id)
     user=users.first()
     users.delete(synchronize_session=False)
