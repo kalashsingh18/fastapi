@@ -1,12 +1,13 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from config import Settings
-sqlalchemy_database_url="postgresql://fastapiuser:Axhcy8nhpba61kFaITHvhGAFbwScHJCS@dpg-coh27onsc6pc73aet7ug-a.oregon-postgres.render.com/fastapi_i3fn"
 
-engine=create_engine(sqlalchemy_database_url)
-sesionlocal=sessionmaker(autoflush=False,autocommit=False,bind=engine)
-Base=declarative_base()    
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+sesionlocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+  
 def get_db():
     db = sesionlocal()
     try:
